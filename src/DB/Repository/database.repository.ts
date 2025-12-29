@@ -272,4 +272,5 @@ export abstract class DataBaseRepository<TR, TDocument = HydratedDocument<TR>> {
       result,
     };
   }
+  
 }
