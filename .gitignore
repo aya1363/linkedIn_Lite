@@ -2,6 +2,11 @@
 /dist
 /node_modules
 /build
+config/
+logs/
+.env
+node_modules/
+config/.env.development
 
 # Logs
 logs
