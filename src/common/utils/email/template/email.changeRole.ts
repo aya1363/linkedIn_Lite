@@ -41,7 +41,7 @@ export const emailVerificationApproval = async ({
       margin-bottom: 30px;
     }
 
-     .message-box {
+    .message-box {
     background: #f5f9ff;
     border-left: 6px solid #427ef5;
     padding: 20px 24px;
@@ -82,9 +82,6 @@ export const emailVerificationApproval = async ({
 <body>
   <div class="container">
     <h1>${title}</h1>
-    
-
-    <div class="message-box">${message}</div>
       <p style="
       color:#555;
       font-size:16px;
@@ -94,7 +91,7 @@ export const emailVerificationApproval = async ({
       Welcome to a professional experience with <strong>${process.env.APPLICATION_NAME}</strong>.
     </p>
 
-
+    <div class="message-box">Great!🎉<br>${message}</div>
 
     <div class="footer">
       &copy; 2025 My Company. All rights reserved.

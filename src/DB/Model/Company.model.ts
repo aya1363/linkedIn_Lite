@@ -5,8 +5,11 @@ import { ICompany } from 'src/common';
 
 
 @Schema({
-  timestamps: true, strictQuery: true, strict: true,
-  toJSON:{virtuals:true},toObject:{virtuals:true}
+  timestamps: true,
+  strictQuery: true,
+  strict: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 })
 export class Company implements ICompany {
   @Prop({
@@ -25,7 +28,7 @@ export class Company implements ICompany {
     max: 20,
   })
   numberOfEmployees: number;
-  
+
   @Prop({
     type: String,
     trim: true,
@@ -91,6 +94,11 @@ export class Company implements ICompany {
     ref: 'User',
   })
   updatedBy?: Types.ObjectId;
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'User',
+  })
+  bannedBy?: Types.ObjectId;
 }
 export type CompanyDocument = HydratedDocument<Company>;
 export const companySchema = SchemaFactory.createForClass(Company);

@@ -7,6 +7,7 @@ import { endPoint } from './company.authorization';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ICompanyResponse } from './entities/company.entity';
 import { CompanyParamsDto, UpdateCompanyDto } from './dto/update-company.dto';
+
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Controller('company')
 export class CompanyController {
@@ -16,7 +17,8 @@ export class CompanyController {
     FileInterceptor(
       'LegalAttachment',
       cloudFileUpload({ validation: fileValidation.document }),
-    ))
+    ),
+  )
   @Auth(endPoint.create)
   @Post()
   async create(
@@ -40,10 +42,17 @@ export class CompanyController {
     await this.companyService.approveCompany(companyParamsDto.companyId, user);
     return successResponse();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companyService.findOne(+id);
+  @Auth(endPoint.find)
+  @Get(':companyId')
+  async findOne(
+    @User() user: UserDocument,
+    @Param() companyParamsDto: CompanyParamsDto,
+  ): Promise<IResponse<ICompanyResponse>> {
+    const company = await this.companyService.findOne(
+      companyParamsDto.companyId,
+      user,
+    );
+    return successResponse<ICompanyResponse>({ data: { company } });
   }
 
   @Auth(endPoint.create)
@@ -74,7 +83,12 @@ export class CompanyController {
     @Param() params: CompanyParamsDto,
     @User() user: UserDocument,
   ): Promise<IResponse<ICompanyResponse>> {
-    const company = await this.companyService.updateAsset(params.companyId, user, file, 'coverImage');
+    const company = await this.companyService.updateAsset(
+      params.companyId,
+      user,
+      file,
+      'coverImage',
+    );
 
     return successResponse<ICompanyResponse>({ data: { company } });
   }
@@ -92,13 +106,49 @@ export class CompanyController {
     @Param() params: CompanyParamsDto,
     @User() user: UserDocument,
   ): Promise<IResponse<ICompanyResponse>> {
-    const company = await this.companyService.updateAsset(params.companyId, user, file, 'logo');
+    const company = await this.companyService.updateAsset(
+      params.companyId,
+      user,
+      file,
+      'logo',
+    );
 
     return successResponse<ICompanyResponse>({ data: { company } });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyService.remove(+id);
+  @Auth(endPoint.approve)
+  @Patch(':companyId/ban-company')
+  async banCompany(
+    @User() user: UserDocument,
+    @Param() companyParamsDto: CompanyParamsDto,
+  ): Promise<IResponse> {
+      await this.companyService.banCompany(
+      companyParamsDto.companyId,
+      user,
+    );
+    return successResponse();
+  }
+
+  @Auth(endPoint.approve)
+  @Patch(':companyId/un-ban-company')
+  async UnBanCompany(
+    @User() user: UserDocument,
+    @Param() companyParamsDto: CompanyParamsDto,
+  ): Promise<IResponse<ICompanyResponse>> {
+    const company = await this.companyService.unBanCompany(
+      companyParamsDto.companyId,
+      user,
+    );
+    return successResponse<ICompanyResponse>({ data: { company } });
+  }
+
+  @Auth(endPoint.approve)
+  @Delete(':companyId/remove')
+  async removeCompany(
+    @User() user: UserDocument,
+    @Param() companyParamsDto: CompanyParamsDto,
+  ): Promise<IResponse> {
+    await this.companyService.remove(companyParamsDto.companyId, user);
+    return successResponse();
   }
 }

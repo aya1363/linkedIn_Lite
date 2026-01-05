@@ -99,14 +99,6 @@ export class CompanyService {
     return DoneMessage;
   }
 
-  findAll() {
-    return `This action returns all company`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
-  }
-
   async update(
     updateCompanyDto: UpdateCompanyDto,
     companyId: Types.ObjectId,
@@ -212,7 +204,90 @@ export class CompanyService {
     return updatedCompany;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async banCompany(companyId: Types.ObjectId, user: UserDocument):Promise<string>{
+    if (user.role !== RoleEnum.admin) {
+      throw new ForbiddenException('Only admin can ban company');
+    }
+
+    const company = await this.companyRepository.findOneAndUpdate({
+      filter: {
+        _id: companyId,
+        bannedAt: { $exists: false },
+        paranoid: false,
+      },
+      update: {
+        bannedAt: new Date(),
+        bannedBy: user._id,
+      },
+    });
+    
+    if (!company) {
+      throw new BadRequestException('fail to Ban company instance');
+    }
+
+    return DoneMessage;
+  }
+
+  async unBanCompany(companyId: Types.ObjectId, user: UserDocument) {
+    if (user.role !== RoleEnum.admin) {
+      throw new ForbiddenException('Only admin can un ban company');
+    }
+
+    const company = await this.companyRepository.findOneAndUpdate({
+      filter: {
+        _id: companyId, bannedAt: { $exists: true },
+        paranoid: false
+      },
+      update: {
+        $unset: {
+          bannedAt: 1,
+          bannedBy: 1,
+        },
+      },
+    });
+    if (!company) {
+      throw new BadRequestException('fail to un Ban company instance');
+    }
+
+    return company;
+  }
+
+  async findOne(companyId: Types.ObjectId, user: UserDocument) {
+    if (user.role !== RoleEnum.admin) {
+      throw new ForbiddenException('Only admin can un ban company');
+    }
+
+    const company = await this.companyRepository.findOne({
+      filter: { _id: companyId },
+    
+    });
+    if (!company) {
+      throw new BadRequestException('fail to find company instance');
+    }
+
+    return company;
+  }
+  async remove(companyId: Types.ObjectId, user: UserDocument) {
+    if (user.role !== RoleEnum.admin) {
+      throw new ForbiddenException('Only admin can remove company');
+    }
+
+    const company = await this.companyRepository.findOneAndDelete({
+      filter: {
+        _id: companyId,
+        bannedAt: { $exists: true },
+        deletedAt: { $exists: false },
+      },
+    });
+
+    if (!company) {
+      throw new BadRequestException('Company not found or not banned');
+    }
+
+    await this.s3Service.deleteListFolderByPrefix({
+      path: `${FolderEnum.Company}/${company.assetFolderId}`,
+    });
+
+    return DoneMessage;
   }
 }

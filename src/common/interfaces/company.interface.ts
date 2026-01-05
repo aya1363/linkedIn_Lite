@@ -5,11 +5,11 @@ import { IUser } from './user.interface';
 export interface ICompany {
   _id?: Types.ObjectId;
   name: string;
-  numberOfEmployees:number;
-  industry:string;
-  legalAttachment:string;
+  numberOfEmployees: number;
+  industry: string;
+  legalAttachment: string;
   approvedByAdmin: boolean;
-  address?:string
+  address?: string;
   email: string;
   description?: string;
   logo?: string;
@@ -20,8 +20,9 @@ export interface ICompany {
   createdAt?: Date;
   updatedAt?: Date;
   bannedAt?: Date;
-  deletedAt:Date
+  deletedAt: Date;
   restoredAt?: Date;
   createdBy: IUser | Types.ObjectId;
+  bannedBy?: IUser | Types.ObjectId;
   updatedBy?: IUser | Types.ObjectId;
 }

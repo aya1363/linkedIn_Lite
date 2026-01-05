@@ -189,7 +189,6 @@ export class UserService {
   }
 
   async remove(userId: Types.ObjectId, user: UserDocument): Promise<string> {
-    console.log(user.userName);
 
     const profile = await this.userRepository.findOneAndDelete({
       filter: {
