@@ -6,5 +6,5 @@ export enum storageEnum {
 export enum FolderEnum {
   User = 'User',
   Company = 'Company',
-  JOB='Job'
+  UserCV= 'UserCV'
 }

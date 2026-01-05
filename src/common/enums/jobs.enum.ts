@@ -9,7 +9,7 @@ export enum JobLocation {
   Hybrid = 'Hybrid',
 }
 
-export enum seniorityLevel {
+export enum SeniorityLevel {
   Junior = 'junior',
   Senior = 'senior',
   MidLevel = 'hybrid',
