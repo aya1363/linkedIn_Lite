@@ -2,8 +2,8 @@ import { MongooseModule, Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mo
 import { HydratedDocument, Types } from 'mongoose';
 import { GenderEnum, PreferredLanguage, ProviderEnum, RoleEnum } from '../../common/enums';
 import { OtpDocument } from './otp.model';
-import { generateHash } from 'src/common';
-import { IUser } from 'src/common';
+import { generateHash } from '../../common';
+import { IUser } from '../../common';
 import { decrypt, encrypt } from 'src/common/utils/security/cypto.security';
 
 @Schema({

@@ -7,7 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SharedAuthenticationModule } from './common/modules';
 import { GlobalExceptionFilter, S3Service } from './common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, RouterModule } from '@nestjs/core';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UserModule } from './modules/user/user.module';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -15,6 +15,7 @@ import { CompanyModule } from './modules/company/company.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TestResolver } from './graphql/test.resolver';
+import { JobModule } from './modules/job/job.module';
 
 @Module({
   imports: [
@@ -33,15 +34,28 @@ import { TestResolver } from './graphql/test.resolver';
         },
       ],
     }),
+    RouterModule.register([
+      {
+        path: 'company/:companyId',
+        children: [
+          {
+            path: 'jobs',
+            module: JobModule,
+          },
+        ],
+      },
+    ]),
+
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql', 
+      autoSchemaFile: 'schema.gql',
       playground: true,
     }),
     SharedAuthenticationModule,
     AuthenticationModule,
     UserModule,
     CompanyModule,
+    JobModule,
   ],
   controllers: [AppController],
   providers: [

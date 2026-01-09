@@ -26,9 +26,8 @@ export class AuthenticationController {
     @Body()
     body: SignupBodyDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.signup(body);
-    return successResponse();
+    return successResponse({status:201});
   }
 
   @HttpCode(200)
@@ -36,7 +35,6 @@ export class AuthenticationController {
   async signupWthGmail(
     @Body() body: IGmail,
   ): Promise<IResponse<LoginCredentialsResponse>> {
-    console.log({ body });
     const credentials = await this.authenticationService.signupWithGmail(body);
     return successResponse<LoginCredentialsResponse>({ data: credentials });
   }
@@ -46,7 +44,6 @@ export class AuthenticationController {
   async loginWthGmail(
     @Body() body: IGmail,
   ): Promise<IResponse<LoginCredentialsResponse>> {
-    console.log({ body });
     const credentials = await this.authenticationService.loginWithGmail(body);
     return successResponse<LoginCredentialsResponse>({ data: credentials });
   }
@@ -56,7 +53,6 @@ export class AuthenticationController {
     @Body()
     body: resendConfirmEmailBodyDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.resendConfirmEmail(body);
     return successResponse();
   }
@@ -66,7 +62,6 @@ export class AuthenticationController {
     @Body()
     body: confirmEmailBodyDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.confirmEmail(body);
     return successResponse();
   }
@@ -76,7 +71,6 @@ export class AuthenticationController {
     @Body()
     body: SendOtpDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.sendForgetPasswordOtp(body);
     return successResponse();
   }
@@ -86,7 +80,6 @@ export class AuthenticationController {
     @Body()
     body: VerifyOtpDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.verifyForgetPasswordOtp(body);
     return successResponse();
   }
@@ -96,7 +89,6 @@ export class AuthenticationController {
     @Body()
     body: ResetPasswordDto,
   ): Promise<IResponse<{ message: string }>> {
-    console.log({ body });
     await this.authenticationService.resetPassword(body);
     return successResponse();
   }
@@ -106,7 +98,6 @@ export class AuthenticationController {
   async login(
     @Body() body: loginBodyDto,
   ): Promise<IResponse<LoginCredentialsResponse>> {
-    console.log({ body });
     const credentials = await this.authenticationService.login(body);
     return successResponse<LoginCredentialsResponse>({ data: credentials });
   }

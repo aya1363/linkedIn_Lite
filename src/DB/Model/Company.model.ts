@@ -1,7 +1,7 @@
 import { MongooseModule, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types, UpdateQuery } from 'mongoose';
 import slugify from 'slugify';
-import { ICompany } from 'src/common';
+import { ICompany } from '../../common';
 
 
 @Schema({
@@ -103,14 +103,6 @@ export class Company implements ICompany {
 export type CompanyDocument = HydratedDocument<Company>;
 export const companySchema = SchemaFactory.createForClass(Company);
 
-//companySchema.pre('save', function (next) {
-  // console.log(this);
-
-  //if (this.isModified('name')) {
- //   this.slug = slugify(this.name);
- // }
- // next();
-//});
 
 companySchema.pre(['findOneAndUpdate', 'updateOne'], function (next) {
   const update = this.getUpdate() as UpdateQuery<Company>;

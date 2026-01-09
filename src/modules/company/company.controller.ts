@@ -31,7 +31,7 @@ export class CompanyController {
       user,
       file,
     );
-    return successResponse<ICompanyResponse>({ data: { company } });
+    return successResponse<ICompanyResponse>({ data: { company },status:201 });
   }
   @Auth(endPoint.approve)
   @Patch(':companyId/approve-company')

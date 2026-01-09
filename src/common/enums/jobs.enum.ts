@@ -1,11 +1,11 @@
 export enum WorkingTime {
-  PartTime = 'Part_time',
-  FullTime = 'Full_time',
+  PartTime = 'part_time',
+  FullTime = 'full_time',
 }
 
 export enum JobLocation {
-  online = 'online',
-  onSite = 'onSite',
+  Online = 'online',
+  OnSite = 'on-site',
   Hybrid = 'Hybrid',
 }
 

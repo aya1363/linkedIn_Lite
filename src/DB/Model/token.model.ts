@@ -1,6 +1,6 @@
 import { MongooseModule, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { IToken } from 'src/common';
+import { IToken } from '../../common';
 
 @Schema({
   strictQuery: true,
